@@ -30,6 +30,7 @@ void *mina_alloc(Min_Arena *arena, size_t size);
 void *mina_realloc(Min_Arena *arena, void *ptr, size_t old_size,
                    size_t new_size);
 const char *mina_format(Min_Arena *arena, const char *fmt, ...);
+const char *mina_formatv(Min_Arena *arena, const char *fmt, va_list args);
 
 #endif // MINARENA_H_
 
@@ -112,6 +113,20 @@ const char *mina_format(Min_Arena *arena, const char *format, ...) {
   va_start(args, format);
   vsnprintf(result, n + 1, format, args);
   va_end(args);
+  return result;
+}
+const char *mina_formatv(Min_Arena *arena, const char *fmt, va_list args) {
+  va_list args_copy;
+  va_copy(args_copy, args);
+  int n = vsnprintf(NULL, 0, fmt, args_copy);
+  va_end(args_copy);
+
+  assert(n >= 0);
+  char *result = (char *)mina_alloc(arena, n + 1);
+
+  va_copy(args_copy, args);
+  vsnprintf(result, n + 1, fmt, args);
+  va_end(args_copy);
   return result;
 }
 
