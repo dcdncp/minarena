@@ -8,8 +8,6 @@
 #include <stdarg.h>
 #include <stdbool.h>
 #include <stdint.h>
-#include <stdio.h>
-#include <stdlib.h>
 
 #define DEFAULT_CHUNK_CAPACITY (8 * 1024)
 #define DEFAULT_ALIGNMENT (2 * sizeof(void *))
@@ -35,9 +33,10 @@ const char *mina_format(Min_Arena *arena, const char *fmt, ...);
 
 #endif // MINARENA_H_
 
-#define MINARENA_IMPLEMENTATION
-
 #ifdef MINARENA_IMPLEMENTATION
+
+#include <stdio.h>
+#include <stdlib.h>
 
 Min_Arena_Chunk *new_mina_chunk(size_t capacity) {
   Min_Arena_Chunk *chunk = malloc(sizeof(Min_Arena_Chunk));
